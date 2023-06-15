@@ -6,7 +6,7 @@ SEC_GRP="CC_HW2_SEC_GRP"
 KEY_PEM="$KEY_NAME.pem"
 UBUNTU_AMI="ami-015c25ad8763b2f11"
 
-GITHUB_URL="https://github.com/linoyElimeleh/cloud_computing_ex2_2.0"
+GITHUB_URL="https://github.com/linoyElimeleh/cloud_computing_ex2"
 PROJ_NAME="cloud_computing_ex2"
 
 USER_REGION=$(aws configure get region --output text)
@@ -64,7 +64,7 @@ function setup_worker() {
     return
   fi
 
-  printf "AMO_ID:  %s...\n" "$AMI_ID"
+  printf "AMI_ID:  %s...\n" "$AMI_ID"
 
   RUN_INSTANCES=$(aws ec2 run-instances   \
     --image-id $UBUNTU_AMI        \
@@ -111,8 +111,6 @@ EOF
         --query ImageId --output text)
 
   aws ec2 wait image-available --image-ids "$IMAGE_ID"
-
-  aws ec2 terminate-instances --instance-ids "$INSTANCE_ID"
 
   echo "$IMAGE_ID"
 }
@@ -173,9 +171,9 @@ function deploy_orchestrator() {
       git clone "$GITHUB_URL.git"
       cd $PROJ_NAME
 
-      echo WORKER_AMI_ID = "'$WORKER_AMI_ID'" >> "$LB_CONST"
-      echo orchestrator_public_ip = "'$PUBLIC_IP'" >> "$LB_CONST"
-      echo USER_REGION = "'$USER_REGION'" >> "$LB_CONST"
+      echo WORKER_AMI_ID = "'$WORKER_AMI_ID'" >> "$ORCH_CONFIG"
+      echo orchestrator_public_ip = "'$PUBLIC_IP'" >> "$ORCH_CONFIG"
+      echo USER_REGION = "'$USER_REGION'" >> "$ORCH_CONFIG"
 
       printf "Install requirements\n"
       pip3 install -r "orchestrator/requirements.txt"
@@ -231,7 +229,7 @@ function deploy_api() {
       echo "Install requirements"
       pip3 install -r "api/requirements.txt"
 
-      echo orchestrator_public_ip = "'$orchestrator_public_ip'" >> "$END_POINT_CONST"
+      echo orchestrator_public_ip = "'$orchestrator_public_ip'" >> "$API_CONFIG"
 
       export FLASK_APP="end_point/app.py"
       nohup flask run --host=0.0.0.0 &>/dev/null & exit
@@ -249,24 +247,20 @@ POLICY_PATH="file://run/trust-policy.json"
 
 printf "Create worker AMI \n"
 worker_AMI_logs=$(setup_worker)
-echo "$worker_AMI_logs" >> worker_AMI_logs.txt
 WORKER_AMI_ID=$(echo "$worker_AMI_logs" | tail -1)
 printf "Using %s \n" "$WORKER_AMI_ID"
 
 printf "Deploy orchestrator\n"
 orchestrator_logs=$(deploy_orchestrator "$WORKER_AMI_ID")
-echo "$orchestrator_logs" >> orchestrator_logs.txt
 orchestrator_public_ip=$(echo "$orchestrator_logs" | tail -1)
-printf "Orchestrator @ %s \n" "$orchestrator_public_ip"
+printf "Orchestrator service: %s \n" "$orchestrator_public_ip"
 
-printf "Deploy instance1 \n"
+printf "Deploy first instance \n"
 EP_1_logs=$(deploy_api "$orchestrator_public_ip")
-echo "$EP_1_logs" >> EP_1_logs.txt
 EP_1_PUBLIC_IP=$(echo "$EP_1_logs" | tail -1)
-printf "New instance1 @ %s \n" "$EP_1_PUBLIC_IP"
+printf "first instance: %s \n" "$EP_1_PUBLIC_IP"
 
-printf "Deploy instance2"
+printf "Deploy second instance"
 EP_2_logs=$(deploy_api "$orchestrator_public_ip")
-echo "$EP_2_logs" >> EP_2_logs.txt
 EP_2_PUBLIC_IP=$(echo "$EP_2_logs" | tail -1)
-printf "New instance2 @ %s \n" "$EP_2_PUBLIC_IP"
+printf "second instance: %s \n" "$EP_2_PUBLIC_IP"

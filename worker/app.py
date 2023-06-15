@@ -3,7 +3,7 @@ import time
 import boto3
 from ec2_metadata import ec2_metadata
 import os
-from const import LB_PUBLIC_IP, TIME_OUT, PORT, HARAKIRI
+from config import LB_PUBLIC_IP, TIME_OUT, PORT, EXIT_FLAG
 from datetime import datetime
 
 
@@ -31,7 +31,7 @@ def main():
             start_time = datetime.utcnow()
 
         else:
-            if dif.seconds > 10 and HARAKIRI:
+            if dif.seconds > TIME_OUT and EXIT_FLAG:
                 os.system('sudo shutdown -h now')
 
             time.sleep(1)

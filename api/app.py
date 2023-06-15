@@ -1,6 +1,6 @@
 from flask import Response, Flask, render_template, request, redirect
 import requests
-from const import LB_PUBLIC_IP
+from config import LB_PUBLIC_IP
 import json
 
 app = Flask(__name__)
@@ -11,7 +11,7 @@ def enqueue():
     if request.method == "PUT":
         data = request.get_data()
         iter = int(request.args.get("iterations"))
-        res = requests.put(url=f"http://{LB_PUBLIC_IP}:5000/add_job_to_queue?iterations={iter}", data=data)
+        res = requests.put(url=f"http://{LB_PUBLIC_IP}:5000/addJob?iterations={iter}", data=data)
         return Response(status=res.status_code)
 
 

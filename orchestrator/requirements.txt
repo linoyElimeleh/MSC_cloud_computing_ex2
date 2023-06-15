@@ -1,0 +1,15 @@
+python-dateutil
+s3transfer
+six
+botocore
+click
+Flask
+urllib3
+Werkzeug
+zipp
+importlib-metadata
+itsdangerous
+Jinja2
+boto3
+jmespath
+MarkupSafe
