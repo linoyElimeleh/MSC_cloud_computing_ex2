@@ -7,7 +7,7 @@ SEC_GRP="dynamic-workload-SG"
 # Machine type
 UBUNTU_22_04_AMI="ami-015c25ad8763b2f11"
 
-GITHUB_URL="https://github.com/linoyElimeleh/cloud_computing_ex2"
+GITHUB_URL="https://github.com/linoyElimeleh/cloud_computing_ex2_2.0"
 PROJ_NAME="dynamic-workload"
 
 # Requirements path
