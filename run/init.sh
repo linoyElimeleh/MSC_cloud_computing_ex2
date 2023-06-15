@@ -7,7 +7,7 @@ KEY_PEM="$KEY_NAME.pem"
 UBUNTU_AMI="ami-015c25ad8763b2f11"
 
 GITHUB_URL="https://github.com/linoyElimeleh/cloud_computing_ex2_2.0"
-PROJ_NAME="cloud_computing_ex2"
+PROJ_NAME="cloud_computing_ex2_2.0"
 
 USER_REGION=$(aws configure get region --output text)
 MY_IP=$(curl ipinfo.io/ip)
