@@ -1,0 +1,36 @@
+# Keys
+KEY_NAME="dynamic-workload-AWS"
+
+# Security groups
+SEC_GRP="dynamic-workload-SG"
+
+# Machine type
+UBUNTU_22_04_AMI="ami-015c25ad8763b2f11"
+
+GITHUB_URL="https://github.com/linoyElimeleh/cloud_computing_ex2"
+PROJ_NAME="dynamic-workload"
+
+# Requirements path
+END_POINT_REQ="api/requirements.txt"
+LB_REQ="orchestrator/requirements.txt"
+WORKER_REQ="worker/requirements.txt"
+
+# Const path
+END_POINT_CONST="api/const.py"
+LB_CONST="orchestrator/const.py"
+WORKER_CONST="worker/const.py"
+
+# App path
+END_POINT_APP="api/app.py"
+LB_APP="orchestrator/app.py"
+WORKER_APP="worker/app.py"
+
+LB_INIT_PATH="run/orchestrator_init.sh"
+
+# Create an IAM Role
+ROLE_NAME="EC2FullAccess"
+POLICY_PATH="file://run/trust-policy.json"
+
+AMI_NAME="worker"
+IMG_TAG_KEY_1="service"
+IMG_TAG_VAL_1="dynamic-workload"
